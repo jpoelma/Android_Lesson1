@@ -16,7 +16,6 @@ public class CardButton implements View.OnClickListener {
 		myButton = button;
 		myId = id;
 		myButton.setOnClickListener(this);
-		//myButton.setText("??");
 		revealed = false;
 		updateView();
 	}
@@ -49,7 +48,6 @@ public class CardButton implements View.OnClickListener {
 	}
 	@Override
 	public void onClick(View v) {
-		// TODO Auto-generated method stub
 		if(!revealed) {
 			revealed = true;
 			updateView();
@@ -61,7 +59,6 @@ public class CardButton implements View.OnClickListener {
 	public void resetState() {
 		revealed = false;
 		updateView();
-		//myButton.setText("??");
 	}
 	public boolean isRevealed() {
 		return revealed;

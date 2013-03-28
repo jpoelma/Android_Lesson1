@@ -8,6 +8,7 @@ import android.os.Handler;
 import android.app.Activity;
 import android.text.Html;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup.LayoutParams;
@@ -15,6 +16,7 @@ import android.widget.Button;
 import android.widget.GridLayout;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
+import android.widget.TableRow;
 import android.widget.TextView;
 
 public class MainActivity extends Activity implements CardGame {
@@ -34,12 +36,11 @@ public class MainActivity extends Activity implements CardGame {
 	private Handler myHandler = new Handler();
 	private Runnable clearSelectionRunnable;
 	private int flips;
-	
+	private int numberOfCards;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		//myHandler = new Handler();
 		clearSelectionRunnable = new Runnable() {
 
 			@Override
@@ -50,16 +51,11 @@ public class MainActivity extends Activity implements CardGame {
 			}
 			
 		};
+		GridLayout ll = (GridLayout)findViewById(R.id.cardTable);
+		ll.removeAllViews();
+
 		initGame();
-		/*
-		Button myButton = new Button(this);
-		myButton.setText("Push Me");
-		GridLayout ll = (GridLayout)findViewById(R.id.main_layout);
-		
-		
-		LayoutParams lp = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
-		ll.addView(myButton, lp);	
-		*/
+	
 		
 	}
 
@@ -72,21 +68,30 @@ public class MainActivity extends Activity implements CardGame {
 
 	@Override
 	public void initGame() {
+		numberOfCards = 24;
+		Button myButton;
+		GridLayout cardTable = (GridLayout)findViewById(R.id.cardTable);
+		Log.println( Log.INFO, " A tag", "Init Table");
+		cardTable.setColumnCount(4);
+		cardTable.setRowCount(numberOfCards / 4 + ((numberOfCards % 4) !=0 ? 1: 0));
+		Log.println( Log.INFO, " A tag", "Init Tiles");
+		//cardTable.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
+		LayoutParams lp;
+		cardTiles = new CardButton[numberOfCards];
 		
+		for(int i=0; i<numberOfCards; i++) {
+			myButton = new Button(this);
+			myButton.setText("");
+			myButton.setGravity(Gravity.FILL_HORIZONTAL);
+			cardTiles[i] =new CardButton(i, myButton); //(Button)findViewById(cardTileIds[i]));
+			cardTiles[i].setCardGame(this);
+			lp= new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+			cardTable.addView(myButton, i, lp);
+		}
 
 		
-		
-		// TODO Auto-generated method stub
 		deck = new Deck();
-		deck.shuffleAll();
-		cardTiles = new CardButton[cardTileIds.length];
 		
-		Card[] drawnCards= deck.draw(cardTileIds.length);
-		for(int i=0; i<cardTileIds.length; i++) {
-			cardTiles[i] =new CardButton(i, (Button)findViewById(cardTileIds[i]));
-			cardTiles[i].setCard(drawnCards[i]);
-			cardTiles[i].setCardGame(this);
-		}
 		chosenTiles = new LinkedList< Integer >();
 		match2 = ((RadioButton)findViewById(R.id.match2));
 		match3 = ((RadioButton)findViewById(R.id.match3));
@@ -99,6 +104,10 @@ public class MainActivity extends Activity implements CardGame {
 			c.resetState();
 		}
 		deck.shuffleAll();
+		Card[] drawnCards= deck.draw(numberOfCards);
+		for(int i=0; i<numberOfCards; i++) {
+			cardTiles[i].setCard(drawnCards[i]);			
+		}
 	}
 	@Override
 	public void newGame() {

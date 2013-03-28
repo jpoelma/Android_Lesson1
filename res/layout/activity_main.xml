@@ -8,6 +8,7 @@
     tools:context=".MainActivity" >
 
     <GridLayout
+        android:id="@+id/cardTable"
         android:layout_gravity="center_horizontal"
         android:columnCount="4"
         android:rowCount="4" >
