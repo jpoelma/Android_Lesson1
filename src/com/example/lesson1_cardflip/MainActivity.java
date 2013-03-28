@@ -102,6 +102,8 @@ public class MainActivity extends Activity implements CardGame {
 	}
 	@Override
 	public void newGame() {
+		match2.setEnabled(true);
+		match3.setEnabled(true);
 		points =0;
 		flips = 0;
 		((TextView)findViewById(R.id.actionText)).setText("");
@@ -110,6 +112,8 @@ public class MainActivity extends Activity implements CardGame {
 		//Note: needs Score Reset to
 	}
 	private int getNumberToMatch() {
+		match2.setEnabled(false);
+		match3.setEnabled(false);
 		if(match2.isChecked()) {
 			return 2;
 		}
