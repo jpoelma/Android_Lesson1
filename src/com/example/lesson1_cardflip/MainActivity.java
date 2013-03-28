@@ -112,8 +112,10 @@ public class MainActivity extends Activity implements CardGame {
 		//Note: needs Score Reset to
 	}
 	private int getNumberToMatch() {
+		//Grey Out Game mode to prevent play from "re-choosing" their  mode mid-game
 		match2.setEnabled(false);
 		match3.setEnabled(false);
+		//Figure out How many to match
 		if(match2.isChecked()) {
 			return 2;
 		}
@@ -124,7 +126,7 @@ public class MainActivity extends Activity implements CardGame {
 		return 0;
 	}
 	
-
+	//Refresh the Score & points TextBoxes
 	private void refreshDisplay() {
 		((TextView)findViewById(R.id.scoreText)).setText("Score: " + points);
 		((TextView)findViewById(R.id.flipCountText)).setText("Flips: " + flips);
@@ -138,9 +140,9 @@ public class MainActivity extends Activity implements CardGame {
 		Card card2;
 		flips++;
 		
-		
+		//Add Picked Card To pile
 		chosenTiles.add(tileId);
-		
+		//Do I need to check the cards selected?
 		if(getNumberToMatch() > chosenTiles.size()) {
 			return;
 		}
@@ -157,7 +159,8 @@ public class MainActivity extends Activity implements CardGame {
 				}
 			}
 		}
-
+		//Has a sufficient number of matched been made? (Ex: for 3 card match => (A Matches B && B Matches C)  "A" does not need to match "C" )
+		//   Ex: A-Clubs + 10-Clubs + 10-Diamonds
 		if(matches < getNumberToMatch()-1) {
 			myHandler.postDelayed(clearSelectionRunnable,500);
 			((TextView)findViewById(R.id.actionText)).setText("Cards Did not match, You lose 1 point");
